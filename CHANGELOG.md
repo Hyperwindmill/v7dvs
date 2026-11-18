@@ -12,6 +12,37 @@ Under 1.0 a closed roadmap step is a minor, everything else is a patch, and a
 break in the config contract is a minor with `BREAKING` on top. After 1.0 —
 which is when the roadmap ends — that break becomes a major.
 
+## [0.8.0] — 2026-11-19
+
+A guide for the DJ rather than the developer, and a public home that holds
+only what a DJ or a packager needs. Nothing that runs has changed since 0.7.0:
+the binaries are the same code.
+
+### Added
+
+- **A guide to external timecode on a Mac**, `docs/external-timecode.md`,
+  written for someone who already plays DVS with a mixer and timecode
+  turntables: the V7 takes the turntable's place, the inputs go from PHONO to
+  LINE and the vinyl type is Serato. Three wiring diagrams, the settings in
+  the v7dvs window and in the DJ software, what each control on the V7 does
+  in this mode, a table of symptoms and causes, and a plain list of what is
+  proven and what is not (Apple Silicon and djay are not).
+- **`make guide`** prints every `docs/*.md` to `dist/v7dvs-<name>-guide.pdf`
+  with headless Chrome, through `packaging/guide2pdf.py`. The diagrams are SVG
+  files in `docs/img/` that the Markdown references as images, so the page on
+  GitHub and the PDF show the same pictures. The PDFs are attached to the
+  release.
+- **A distribution repository.** `packaging/publish.sh` exports a closed list
+  of files, source that builds, the packaging and the guides, into a separate
+  repository that holds one commit per release, and refuses to export anything
+  that looks like personal data or a link to a file it left behind. Releases
+  are published there from this version on, with a README written for people
+  who use the software.
+
+### Changed
+
+- The packages' maintainer field is a GitHub noreply address.
+
 ## [0.7.0] — 2026-10-08
 
 The Mac app for people who did not build it: one zip, nothing to install,

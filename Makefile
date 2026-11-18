@@ -105,6 +105,9 @@ app: v7d
 	rm -rf $(APP) build/py2app
 	$(PY) packaging/macos/setup.py py2app -q -d dist -b build/py2app
 	chmod 755 $(APP)/Contents/Resources/v7d
+	@# py2app leaves a cache of its own site.py compiled here, with the builder's
+	@# home directory in it. Nothing loads it: the bundle imports site.pyc.
+	rm -rf $(APP)/Contents/Resources/__pycache__
 	codesign --force --deep --sign - $(APP)
 	codesign --verify --deep --strict $(APP)
 	rm -f $(ZIP) && ditto -c -k --keepParent $(APP) $(ZIP)
