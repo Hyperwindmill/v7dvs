@@ -1,0 +1,99 @@
+# One description, three packages: `make pkg` runs nfpm from its container and
+# produces .deb, .rpm and Arch .pkg.tar.zst from this file. The version comes
+# from VERSION through the environment, so it cannot disagree with the tag.
+#
+# The dependency names are the same software wearing each distribution's
+# label, and `make pkg-test` installs every package in a fresh container of
+# its distribution to prove the labels are right. Do not edit a name here
+# without running that.
+name: v7dvs
+arch: amd64
+platform: linux
+version: ${VERSION}
+section: sound
+priority: optional
+maintainer: Daniele Traverso <48651572+Hyperwindmill@users.noreply.github.com>
+vendor: Hyperwindmill
+homepage: https://github.com/Hyperwindmill/v7dvs
+license: GPL-3.0-or-later
+description: |
+  Numark V7 as a DVS turntable.
+  Reads the V7's platter over USB and synthesizes real Serato control-vinyl
+  timecode from the rotation, published as audio, plus a generic MIDI port
+  with the raw controls. The DJ app sees a turntable and a nameless
+  controller; no vendor driver, no app-specific code.
+
+contents:
+  - src: ./v7dvs
+    dst: /usr/bin/v7dvs
+  - src: ./v7d
+    dst: /usr/bin/v7d
+  - src: ./launcher.py
+    dst: /usr/lib/v7dvs/launcher.py
+    file_info: { mode: 0755 }
+  - src: ./configwin.py
+    dst: /usr/lib/v7dvs/configwin.py
+  - src: ./VERSION
+    dst: /usr/lib/v7dvs/VERSION
+  - src: ./usb/v7d.py
+    dst: /usr/lib/v7dvs/usb/v7d.py
+  - src: ./usb/v7audio.py
+    dst: /usr/lib/v7dvs/usb/v7audio.py
+  - src: /usr/lib/v7dvs/launcher.py
+    dst: /usr/bin/v7dvs-launcher
+    type: symlink
+  # The three system files the README otherwise asks you to place by hand.
+  - src: ./usb/99-numark-v7.rules
+    dst: /usr/lib/udev/rules.d/99-numark-v7.rules
+  - src: ./packaging/snd-aloop.conf
+    dst: /usr/lib/modules-load.d/v7dvs.conf
+  - src: ./usb/50-v7-loopback.conf
+    dst: /usr/share/wireplumber/wireplumber.conf.d/50-v7dvs-loopback.conf
+  - src: ./packaging/v7dvs.desktop
+    dst: /usr/share/applications/v7dvs.desktop
+  - src: ./COPYING
+    dst: /usr/share/doc/v7dvs/COPYING
+
+scripts:
+  postinstall: ./packaging/postinstall.sh
+
+overrides:
+  deb:
+    depends:
+      - python3
+      - python3-usb1
+      - python3-numpy
+      - python3-tk
+      - pipewire-jack
+      - pipewire-bin
+      - wireplumber
+      - alsa-utils
+      - libasound2
+      # pipewire-jack keeps its libjack off the default loader path (that is
+      # what pw-jack is for), so a plain `v7dvs --version` needs this one.
+      - libjack-jackd2-0 | libjack0
+      - libusb-1.0-0
+  rpm:
+    depends:
+      - python3
+      - python3-libusb1
+      - python3-numpy
+      - python3-tkinter
+      - pipewire-jack-audio-connection-kit
+      - pipewire-utils
+      - wireplumber
+      - alsa-utils
+      - alsa-lib
+      - libusb1
+  archlinux:
+    depends:
+      - python
+      - python-libusb1
+      - python-numpy
+      - tk
+      - pipewire-jack
+      - pipewire
+      - wireplumber
+      - alsa-utils
+      - alsa-lib
+      - libusb

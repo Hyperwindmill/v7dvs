@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=v7dvs
+GenericName=DVS turntable
+Comment=Numark V7 as a Serato-timecode turntable and a generic MIDI controller
+Exec=v7dvs-launcher --configure
+Icon=audio-card
+Terminal=true
+Categories=AudioVideo;Audio;Music;
+Keywords=DJ;DVS;timecode;Numark;V7;

@@ -1,0 +1,21 @@
+v7dvs
+v7d
+tcgen
+tcdec
+platter_test
+midiparse_test
+encoder_test
+tracereplay
+__pycache__/
+*.o
+*.wav
+*.raw
+traces/
+dist/
+build/
+libv7core.*
+
+# Windows-oracle USB captures and large dumps (read directly from disk)
+dev/windows/*.pcap
+dev/windows/*.pcapng
+dev/windows/*.dat
